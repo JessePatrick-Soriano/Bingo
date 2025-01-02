@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -15,10 +16,11 @@ namespace Soriano_JessePatrick_3H_31_12_2024_FinalBingo
 
             Fogliettino PrimoFogliettino = new Fogliettino(PrimoTabellone.Lettere);
 
-            for (int i = 0; i < PrimoTabellone.TheTabellone.Length; i++)
+            for (int i = 0; i < PrimoTabellone.TheTabellone.Length+1; i++)
             {
                 Tabellone.OutputLettere(PrimoTabellone.Lettere);
                 Tabellone.OutputOggetto(PrimoTabellone.TheTabellone, PrimoTabellone.Lettere, 15, true);
+
                 Tabellone.OutputLettere(PrimoTabellone.Lettere);
                 Fogliettino.OutputOggetto(PrimoFogliettino.TheFogliettino, PrimoTabellone.Lettere, 5, false);
 
@@ -56,7 +58,7 @@ namespace Soriano_JessePatrick_3H_31_12_2024_FinalBingo
         {
             foreach (char Lettera in Lettere)
             {
-                Console.Write($"{Lettera,-5}");
+                Console.Write($"{Lettera,-7}");
             }
 
             Console.WriteLine($" "); // Divisore
@@ -83,18 +85,25 @@ namespace Soriano_JessePatrick_3H_31_12_2024_FinalBingo
                     }
                     else
                     {
-                        int NCasuale;
-                        bool Uscita;
-                        do // Verifica se il numero casuale è già presente nell'array
+                        if(RowIterator == 2 && (ColIterator+1)%3 == 0) //Nella riga 3 collona multipli di 3 c'è gratis
                         {
-                            NCasuale = NumeroCasuale(NFogliettino + 1, NFogliettino + 15);
-                            Uscita = !EGiaPresente(Oggetto, NCasuale);
-                        } while (!Uscita);
+                            Oggetto[RowIterator + N, 0] = -1;
+                        }
+                        else
+                        {
+                            int NCasuale;
+                            bool Uscita;
+                            do // Verifica se il numero casuale è già presente nell'array
+                            {
+                                NCasuale = NumeroCasuale(NFogliettino + 1, NFogliettino + 14);
+                                Uscita = !EGiaPresente(Oggetto, NCasuale);
+                            } while (!Uscita);
 
-                        Oggetto[RowIterator + N, 0] = NCasuale;
-                        Oggetto[RowIterator + N, 1] = 0;
+                            Oggetto[RowIterator + N, 0] = NCasuale;
+                            Oggetto[RowIterator + N, 1] = 0;
 
-                        NFogliettino += 15;
+                            NFogliettino += 15;
+                        }
                     }
 
                     N += QuantitaRow;
@@ -121,36 +130,21 @@ namespace Soriano_JessePatrick_3H_31_12_2024_FinalBingo
 
                 for (int ColI = 0; ColI < ColN; ColI++)
                 {
-
-                    if (EUnTabellone == true)
+                    if (Oggetto[RowI + N, 1] == 1)
                     {
-                        if (Oggetto[RowI + N, 1] == 1)
-                        {
-                            output = $"{Oggetto[RowI + N, 0] + 1,-5}";
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write(output);
-                            Console.ResetColor();  // Ripristina il colore predefinito
-                        }
-                        else
-                        {
-                            output = $"{Oggetto[RowI + N, 0] + 1,-5}";
-                            Console.Write(output);
-                        }
+                        output = $"{Oggetto[RowI + N, 0] + 1,-7}";
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write(output);
+                        Console.ResetColor();  // Ripristina il colore predefinito
+                    }
+                    else if(Oggetto[RowI + N, 0] < 0)
+                    {
+                        Console.Write($"{"Gratis",-7}");
                     }
                     else
                     {
-                        if (Oggetto[RowI + N, 1] == 1)
-                        {
-                            output = $"{Oggetto[RowI + N, 0],-5}";
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write(output);
-                            Console.ResetColor();  // Ripristina il colore predefinito
-                        }
-                        else
-                        {
-                            output = $"{Oggetto[RowI + N, 0],-5}";
-                            Console.Write(output);
-                        }
+                        output = $"{Oggetto[RowI + N, 0] + 1,-7}";
+                        Console.Write(output);
                     }
 
                     N += QuantitaRow;
@@ -267,7 +261,7 @@ namespace Soriano_JessePatrick_3H_31_12_2024_FinalBingo
                 }
             } while (!Uscita);
 
-            Console.WriteLine($"Numero estratto: {NCasuale}");
+            Console.WriteLine($"Numero estratto: {NCasuale + 1}");
         }
     }
 
