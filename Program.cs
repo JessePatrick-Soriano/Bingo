@@ -228,41 +228,82 @@ namespace Soriano_JessePatrick_3H_31_12_2024_FinalBingo
             this.TheTabellone = InizializzatoreGenerale(Lettere, 15, true);
         }
 
-        public static void Estrattore(int[,] Tabellone, int[,] Fogliettino)
+public static void Estrattore(int[,] Tabellone, int[,] Fogliettino)
+{
+    int NCasuale, PosizioneNCasuale, NPosition = 0;
+    int Lunghezza1DFogliettino = Fogliettino.GetLength(0);
+    int LunghezzaTotTabellone = Tabellone.Length - 1;
+    bool Uscita = false;
+
+    do
+    {
+        PosizioneNCasuale = NumeroCasuale(0, Tabellone.GetLength(0) - 1);
+        NCasuale = Tabellone[PosizioneNCasuale, 0];  // Ottieni il numero estratto
+
+        if (Tabellone[PosizioneNCasuale, 1] == 1) //Il numero è gia stato estratto, ripetere il procedimento
         {
-            int NCasuale, PosizioneNCasuale, NPosition=0;
-            int Lunghezza1DFogliettino = Fogliettino.GetLength(0);
-            int LunghezzaTotTabellone = Tabellone.Length - 1;
-            bool Uscita = false;
-
-            do
-            {
-                PosizioneNCasuale = NumeroCasuale(0, Tabellone.GetLength(0) - 1);
-                NCasuale = Tabellone[PosizioneNCasuale, 0];  // Ottieni il numero estratto
-
-                if (Tabellone[PosizioneNCasuale, 1] == 1) //Il numero è gia stato estratto, ripetere il procedimento
-                {
-                    Uscita = false;
-                }
-                else //Il numero non è stato ancora estratto
-                {
-                    Tabellone[PosizioneNCasuale, 1] = 1; //Adesso il numero adesso è considerato estratto
-
-                    for (int i = 0; i < Lunghezza1DFogliettino; i++) // Cerca NCasuale in fogliettino
-                    {
-                        if (Fogliettino[i, 0] == NCasuale) //Numero trovato nel fogliettino
-                        {
-                            NPosition = i;
-                            Fogliettino[NPosition, 1] = 1;
-                            break;
-                        }
-                    }
-                    Uscita = true;
-                }
-            } while (!Uscita);
-
-            Console.WriteLine($"Numero estratto: {NCasuale + 1}");
+            Uscita = false;
         }
+        else //Il numero non è stato ancora estratto
+        {
+            Tabellone[PosizioneNCasuale, 1] = 1; //Adesso il numero adesso è considerato estratto
+
+            for (int i = 0; i < Lunghezza1DFogliettino; i++) // Cerca NCasuale in fogliettino
+            {
+                if (Fogliettino[i, 0] == NCasuale) //Numero trovato nel fogliettino
+                {
+                    NPosition = i;
+                    Fogliettino[NPosition, 1] = 1;
+                    break;
+                }
+            }
+            Uscita = true;
+        }
+    } while (!Uscita);
+
+    Console.WriteLine($"Numero estratto: {NCasuale + 1}");
+
+    // Aggiungi il controllo per Bingo
+    if (ControllaBingo(Fogliettino))
+    {
+        Console.WriteLine("Hai fatto bingo!");
+    }
+}
+
+public static bool ControllaBingo(int[,] Fogliettino)
+{
+    // Controlla le righe per il Bingo
+    for (int i = 0; i < 5; i++)  // Supponendo che ogni fogliettino abbia 5 righe
+    {
+        bool bingo = true;
+        for (int j = 0; j < 5; j++)
+        {
+            if (Fogliettino[i + j * 5, 1] != 1)  // Se non tutte le caselle sono segnate
+            {
+                bingo = false;
+                break;
+            }
+        }
+        if (bingo) return true;
+    }
+
+    // Controlla le colonne per il Bingo
+    for (int i = 0; i < 5; i++)  // Supponendo che ogni fogliettino abbia 5 colonne
+    {
+        bool bingo = true;
+        for (int j = 0; j < 5; j++)
+        {
+            if (Fogliettino[j * 5 + i, 1] != 1)  // Se non tutte le caselle sono segnate
+            {
+                bingo = false;
+                break;
+            }
+        }
+        if (bingo) return true;
+    }
+
+    return false;
+}
     }
 
     public class Fogliettino : BingoGenerale
