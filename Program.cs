@@ -11,26 +11,41 @@ namespace Soriano_JessePatrick_3H_31_12_2024_FinalBingo
     internal class Program
     {
         static void Main(string[] args)
+        static void Main(string[] args)
+{
+    Tabellone PrimoTabellone = new Tabellone();
+
+    // Create 3 Fogliettino objects
+    Fogliettino PrimoFogliettino = new Fogliettino(PrimoTabellone.Lettere);
+    Fogliettino SecondoFogliettino = new Fogliettino(PrimoTabellone.Lettere);
+    Fogliettino TerzoFogliettino = new Fogliettino(PrimoTabellone.Lettere);
+
+    // Create an array or list to store the Fogliettino objects for easier management
+    var fogliettini = new List<Fogliettino> { PrimoFogliettino, SecondoFogliettino, TerzoFogliettino };
+
+    for (int i = 0; i < PrimoTabellone.TheTabellone.Length + 1; i++)
+    {
+        Tabellone.OutputLettere(PrimoTabellone.Lettere);
+        Tabellone.OutputOggetto(PrimoTabellone.TheTabellone, PrimoTabellone.Lettere, 15, true);
+
+        Tabellone.OutputLettere(PrimoTabellone.Lettere);
+
+        // Loop through each Fogliettino to display and manage it
+        foreach (var fogliettino in fogliettini)
         {
-            Tabellone PrimoTabellone = new Tabellone();
-
-            Fogliettino PrimoFogliettino = new Fogliettino(PrimoTabellone.Lettere);
-
-            for (int i = 0; i < PrimoTabellone.TheTabellone.Length+1; i++)
-            {
-                Tabellone.OutputLettere(PrimoTabellone.Lettere);
-                Tabellone.OutputOggetto(PrimoTabellone.TheTabellone, PrimoTabellone.Lettere, 15, true);
-
-                Tabellone.OutputLettere(PrimoTabellone.Lettere);
-                Fogliettino.OutputOggetto(PrimoFogliettino.TheFogliettino, PrimoTabellone.Lettere, 5, false);
-
-                Tabellone.Estrattore(PrimoTabellone.TheTabellone, PrimoFogliettino.TheFogliettino);
-                string bruh = Console.ReadLine();
-                Console.Clear();
-            }
-
-            Console.ReadKey();
+            Tabellone.OutputLettere(PrimoTabellone.Lettere);  // Optional: Can be repeated as needed
+            Fogliettino.OutputOggetto(fogliettino.TheFogliettino, PrimoTabellone.Lettere, 5, false);
         }
+
+        Tabellone.Estrattore(PrimoTabellone.TheTabellone, PrimoFogliettino.TheFogliettino);
+        Tabellone.Estrattore(PrimoTabellone.TheTabellone, SecondoFogliettino.TheFogliettino);
+        Tabellone.Estrattore(PrimoTabellone.TheTabellone, TerzoFogliettino.TheFogliettino);
+
+        string bruh = Console.ReadLine();
+        Console.Clear();
+    }
+
+    Console.ReadKey();
     }
 
     abstract public class BingoGenerale
